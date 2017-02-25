@@ -1,15 +1,52 @@
 var app={
 
 	inicio: function(){
+
+		//Velocidad de la bola en X
 		velocidadX = 0;
+		//Velocidad de la bola en Y
     	velocidadY = 0;
+    	//Puntuacion
     	puntuacion = 0;
+    	// number of levels. Useful to preload each level PNGs
+     	levels=1;
+     	// current level
+     	currentLevel=1 ;
+     	//alto dispositivo
+     	alto  = document.documentElement.clientHeight;
+     	//ancho del dispositivo
+    	ancho = document.documentElement.clientWidth;
 
 		app.vigilaSensores();
 		app.iniciaJuego();
 	},
 
 	iniciaJuego: function(){
+
+		function preload() {
+
+			//Añade fisicas
+			game.physics.startSystem(Phaser.Physics.ARCADE);
+			//carga de elementos (assets)
+			game.load.image('bola', 'assets/bola.png');
+      		game.load.image('objetivo', 'assets/finish.png');
+      
+
+      		console.log(ancho);
+      		console.log(alto);
+
+			//Añadir fondo
+			game.stage.backgroundColor = '#2E9AFE';
+		}
+
+		function create() {
+		}
+
+		function update(){
+		}
+
+		var estados = { preload: preload, create: create, update: update };
+    	var game = new Phaser.Game(ancho, alto, Phaser.CANVAS, 'phaser',estados);
 	},
 
 	vigilaSensores: function(){
