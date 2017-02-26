@@ -17,6 +17,16 @@ var app={
      	//ancho del dispositivo
     	ancho = document.documentElement.clientWidth;
 
+		// levels information are stored here
+    	gameLevels = [
+		     {
+		          startSpot: {x: 200, y: 120},
+		          endSpot: {x: 200, y: 600}
+		     }
+		]
+
+
+
 		app.vigilaSensores();
 		app.iniciaJuego();
 	},
@@ -25,11 +35,23 @@ var app={
 
 		function preload() {
 
+			// setting the game on maximum scale mode to cover the entire screen
+      		game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+      		game.scale.pageAlignHorizontally = true;
+      		game.scale.pageAlignVertically = true;
+
 			//Añade fisicas
 			game.physics.startSystem(Phaser.Physics.ARCADE);
 			//carga de elementos (assets)
 			game.load.image('bola', 'assets/bola.png');
       		game.load.image('objetivo', 'assets/finish.png');
+
+      		// preloading all level images, PNG images with transparency
+      		console.log("Nº de niveles:"+ gameLevels.length);
+      		//TODO: DEJO COMENTADO ESTE CODIGO HASTA QUE TENGAMOS LOS NIVELES
+	        /*for(var i = 1; i <= gameLevels.length; i++){
+	        	game.load.image("level" + i, "assets/levels/level" + i + ".png");
+	        }*/
       
 
       		console.log(ancho);
