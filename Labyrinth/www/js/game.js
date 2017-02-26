@@ -49,9 +49,9 @@ var app={
       		// preloading all level images, PNG images with transparency
       		console.log("Nº de niveles:"+ gameLevels.length);
       		//TODO: DEJO COMENTADO ESTE CODIGO HASTA QUE TENGAMOS LOS NIVELES
-	        /*for(var i = 1; i <= gameLevels.length; i++){
+	        for(var i = 1; i <= gameLevels.length; i++){
 	        	game.load.image("level" + i, "assets/levels/level" + i + ".png");
-	        }*/
+	        }
       
 
       		console.log(ancho);
