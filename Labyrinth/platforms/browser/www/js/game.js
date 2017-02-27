@@ -20,8 +20,8 @@ var app={
 		// levels information are stored here
     	gameLevels = [
 		     {
-		          startSpot: {x: 200, y: 120},
-		          endSpot: {x: 200, y: 600}
+		          startSpot: {x: 200, y: 60},
+		          endSpot: {x: 15, y: 15}
 		     }
 		]
 
@@ -48,26 +48,47 @@ var app={
 
       		// preloading all level images, PNG images with transparency
       		console.log("Nº de niveles:"+ gameLevels.length);
-      		//TODO: DEJO COMENTADO ESTE CODIGO HASTA QUE TENGAMOS LOS NIVELES
-	        /*for(var i = 1; i <= gameLevels.length; i++){
+	        for(var i = 1; i <= gameLevels.length; i++){
 	        	game.load.image("level" + i, "assets/levels/level" + i + ".png");
-	        }*/
-      
+	        }
 
-      		console.log(ancho);
-      		console.log(alto);
+	        //prueba
+      		game.load.image('atari', 'assets/atari130xe.png');
+
+      		console.log("Ancho:"+ancho+",Alto:"+alto);
 
 			//Añadir fondo
 			game.stage.backgroundColor = '#2E9AFE';
 		}
 
 		function create() {
+
+			// temp variable to access more quicly to level information
+          	var levelObject = gameLevels[currentLevel - 1];
+          	console.log("Punto Partida-->X:"+levelObject.startSpot.x+",Y:"+levelObject.startSpot.y);
+
+          	bola = game.add.sprite(levelObject.startSpot.x, levelObject.startSpot.y, 'bola');
+          	// setting start icon registration point to its centre
+           	bola.anchor.set(0.5);
+
+          	//PRUEBA CON LAS FISICAS
+          	atari = game.add.sprite(200, 300, 'atari');
+          	atari.anchor.set(0.5);
+          	game.physics.enable(atari, Phaser.Physics.ARCADE);
+          	atari.body.collideWorldBounds = true;
+			atari.body.immovable = true;
+
+
 		}
 
 		function update(){
 		}
 
-		var estados = { preload: preload, create: create, update: update };
+		function render(){
+			game.debug.bodyInfo(atari, 16, 24);
+		}
+
+		var estados = { preload: preload, create: create, update: update, render: render };
     	var game = new Phaser.Game(ancho, alto, Phaser.CANVAS, 'phaser',estados);
 	},
 
