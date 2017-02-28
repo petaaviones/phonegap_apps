@@ -1,5 +1,6 @@
 var app={
 
+	
 	inicio: function(){
 
 		//Velocidad de la bola en X
@@ -26,7 +27,6 @@ var app={
 		]
 
 
-
 		app.vigilaSensores();
 		app.iniciaJuego();
 	},
@@ -36,9 +36,19 @@ var app={
 		function preload() {
 
 			// setting the game on maximum scale mode to cover the entire screen
-      		game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-      		game.scale.pageAlignHorizontally = true;
-      		game.scale.pageAlignVertically = true;
+		   
+			if (!game.device.desktop) {
+				console.log("es mobile!!!");
+		        mobile = true;   
+		        game.stage.fullScreenScaleMode = Phaser.StageScaleMode.EXACT_FIT;        
+		        game.stage.scale.startFullScreen();    
+		    }  else{
+		    	console.log("es desktop!!!");
+		    	mobile = false
+		    	game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+		    	game.scale.pageAlignHorizontally = true;
+  				game.scale.pageAlignVertically = true;
+		    }
 
 			//Añade fisicas
 			game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -67,14 +77,13 @@ var app={
           	var levelObject = gameLevels[currentLevel - 1];
           	console.log("Punto Partida-->X:"+levelObject.startSpot.x+",Y:"+levelObject.startSpot.y);
 
-          	bola = game.add.sprite(levelObject.startSpot.x, levelObject.startSpot.y, 'bola');
-          	// setting start icon registration point to its centre
-           	bola.anchor.set(0.5);
+          	
 
           	//PRUEBA CON LAS FISICAS
           	atari = game.add.sprite(200, 300, 'atari');
           	atari.anchor.set(0.5);
           	game.physics.enable(atari, Phaser.Physics.ARCADE);
+
           	atari.body.collideWorldBounds = true;
 			atari.body.immovable = true;
 
@@ -83,10 +92,52 @@ var app={
 			// setting finish icon registration point to its centre
 			objetivo.anchor.set(0.5);
 
+			bola = game.add.sprite(levelObject.startSpot.x, levelObject.startSpot.y, 'bola');
+           	bola.anchor.set(0.5);
+
+           	//añadimos fisicas
+           	game.physics.enable(bola, Phaser.Physics.ARCADE);
+           	bola.body.collideWorldBounds = true;
+
+			cursors = game.input.keyboard.createCursorKeys();
+
 
 		}
 
 		function update(){
+
+			if(mobile){
+				var factorDificultad = 300;
+             	bola.body.velocity.y = (velocidadY * factorDificultad);
+            	 bola.body.velocity.x = (velocidadX * (-1 * factorDificultad));
+
+			}else{
+
+				bola.body.velocity.y = 0;
+             	bola.body.velocity.x = 0;
+
+				if (cursors.left.isDown)
+				{
+					bola.body.velocity.x = -200;
+
+				}
+				else if (cursors.right.isDown)
+				{
+					bola.body.velocity.x = +200;
+				}
+
+				if (cursors.up.isDown)
+				{
+					bola.body.velocity.y = -200;
+
+				}
+				else if (cursors.down.isDown)
+				{
+					bola.body.velocity.y = 200;
+
+				}
+			}
+
 		}
 
 		function render(){
