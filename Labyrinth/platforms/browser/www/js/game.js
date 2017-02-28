@@ -21,7 +21,7 @@ var app={
     	gameLevels = [
 		     {
 		          startSpot: {x: 200, y: 60},
-		          endSpot: {x: 15, y: 15}
+		          endSpot: {x: 200, y: 590}
 		     }
 		]
 
@@ -77,6 +77,11 @@ var app={
           	game.physics.enable(atari, Phaser.Physics.ARCADE);
           	atari.body.collideWorldBounds = true;
 			atari.body.immovable = true;
+
+			console.log("Punto Final-->X:"+levelObject.endSpot.x+",Y:"+levelObject.endSpot.y);
+			objetivo = game.add.sprite(levelObject.endSpot.x, levelObject.endSpot.y, 'objetivo');
+			// setting finish icon registration point to its centre
+			objetivo.anchor.set(0.5);
 
 
 		}
