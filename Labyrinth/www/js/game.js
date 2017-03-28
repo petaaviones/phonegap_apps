@@ -1,5 +1,6 @@
 var app={
 
+
 	inicio: function(){
 
 		//Velocidad de la bola en X
@@ -26,7 +27,6 @@ var app={
 		]
 
 
-
 		app.vigilaSensores();
 		app.iniciaJuego();
 	},
@@ -36,15 +36,26 @@ var app={
 		function preload() {
 
 			// setting the game on maximum scale mode to cover the entire screen
-      		game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-      		game.scale.pageAlignHorizontally = true;
-      		game.scale.pageAlignVertically = true;
+
+			if (!game.device.desktop) {
+				console.log("es mobile!!!");
+		        mobile = true;
+
+		    }  else{
+		    	console.log("es desktop!!!");
+		    	mobile = false
+
+		    }
+
+		    game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+		    game.scale.pageAlignHorizontally = true;
+  			game.scale.pageAlignVertically = true;
 
 			//Añade fisicas
 			game.physics.startSystem(Phaser.Physics.ARCADE);
 			//carga de elementos (assets)
-			game.load.image('bola', 'assets/bola.png');
-      		game.load.image('objetivo', 'assets/finish.png');
+
+
 
       		// preloading all level images, PNG images with transparency
       		console.log("Nº de niveles:"+ gameLevels.length);
@@ -54,6 +65,8 @@ var app={
 
 	        //prueba
       		game.load.image('atari', 'assets/atari130xe.png');
+					game.load.image('objetivo', 'assets/finish.png');
+					game.load.image('bola', 'assets/bola.png');
 
       		console.log("Ancho:"+ancho+",Alto:"+alto);
 
@@ -67,26 +80,76 @@ var app={
           	var levelObject = gameLevels[currentLevel - 1];
           	console.log("Punto Partida-->X:"+levelObject.startSpot.x+",Y:"+levelObject.startSpot.y);
 
-          	bola = game.add.sprite(levelObject.startSpot.x, levelObject.startSpot.y, 'bola');
-          	// setting start icon registration point to its centre
-           	bola.anchor.set(0.5);
+
 
           	//PRUEBA CON LAS FISICAS
           	atari = game.add.sprite(200, 300, 'atari');
           	atari.anchor.set(0.5);
           	game.physics.enable(atari, Phaser.Physics.ARCADE);
+
           	atari.body.collideWorldBounds = true;
-			atari.body.immovable = true;
+						atari.body.checkCollision = true;
+						atari.body.immovable = true;
 
 			console.log("Punto Final-->X:"+levelObject.endSpot.x+",Y:"+levelObject.endSpot.y);
 			objetivo = game.add.sprite(levelObject.endSpot.x, levelObject.endSpot.y, 'objetivo');
 			// setting finish icon registration point to its centre
 			objetivo.anchor.set(0.5);
+			game.physics.enable(objetivo, Phaser.Physics.ARCADE);
+
+			bola = game.add.sprite(levelObject.startSpot.x, levelObject.startSpot.y, 'bola');
+           	bola.anchor.set(0.5);
+
+           	//añadimos fisicas
+           	game.physics.enable(bola, Phaser.Physics.ARCADE);
+           	bola.body.collideWorldBounds = true;
+
+			cursors = game.input.keyboard.createCursorKeys();
+
+
+
 
 
 		}
 
 		function update(){
+
+			game.physics.arcade.collide(atari, bola);
+			game.physics.arcade.overlap(bola, objetivo, app.finalizaJuego, null, this);
+
+
+			if(mobile){
+				var factorDificultad = 300;
+             	bola.body.velocity.y = (velocidadY * factorDificultad);
+            	 bola.body.velocity.x = (velocidadX * (-1 * factorDificultad));
+
+			}else{
+
+					bola.body.velocity.y = 0;
+        	bola.body.velocity.x = 0;
+
+				if (cursors.left.isDown)
+				{
+					bola.body.velocity.x = -200;
+
+				}
+				else if (cursors.right.isDown)
+				{
+					bola.body.velocity.x = +200;
+				}
+
+				if (cursors.up.isDown)
+				{
+					bola.body.velocity.y = -200;
+
+				}
+				else if (cursors.down.isDown)
+				{
+					bola.body.velocity.y = 200;
+
+				}
+			}
+
 		}
 
 		function render(){
@@ -98,7 +161,7 @@ var app={
 	},
 
 	vigilaSensores: function(){
-    
+
 	    function onError() {
 	        console.log('onError!');
 	    }
@@ -128,8 +191,13 @@ var app={
   	registraDireccion: function(datosAceleracion){
     	velocidadX = datosAceleracion.x ;
     	velocidadY = datosAceleracion.y ;
-  	}
+  	},
 
+		finalizaJuego: function (obj1, obj2){
+			//manejamos las acciones necesarias para finalizar la partida
+			console.log("fin de juego");
+			alert("fin de juego");
+		}
 };
 
 if ('addEventListener' in document) {
