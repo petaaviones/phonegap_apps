@@ -54,8 +54,8 @@ var app={
 			//Añade fisicas
 			game.physics.startSystem(Phaser.Physics.ARCADE);
 			//carga de elementos (assets)
-			game.load.image('bola', 'assets/bola.png');
-      		game.load.image('objetivo', 'assets/finish.png');
+
+
 
       		// preloading all level images, PNG images with transparency
       		console.log("Nº de niveles:"+ gameLevels.length);
@@ -65,6 +65,8 @@ var app={
 
 	        //prueba
       		game.load.image('atari', 'assets/atari130xe.png');
+					game.load.image('objetivo', 'assets/finish.png');
+					game.load.image('bola', 'assets/bola.png');
 
       		console.log("Ancho:"+ancho+",Alto:"+alto);
 
@@ -93,6 +95,7 @@ var app={
 			objetivo = game.add.sprite(levelObject.endSpot.x, levelObject.endSpot.y, 'objetivo');
 			// setting finish icon registration point to its centre
 			objetivo.anchor.set(0.5);
+			game.physics.enable(objetivo, Phaser.Physics.ARCADE);
 
 			bola = game.add.sprite(levelObject.startSpot.x, levelObject.startSpot.y, 'bola');
            	bola.anchor.set(0.5);
@@ -104,11 +107,16 @@ var app={
 			cursors = game.input.keyboard.createCursorKeys();
 
 
+
+
+
 		}
 
 		function update(){
 
 			game.physics.arcade.collide(atari, bola);
+			game.physics.arcade.overlap(bola, objetivo, app.finalizaJuego, null, this);
+
 
 			if(mobile){
 				var factorDificultad = 300;
@@ -183,8 +191,13 @@ var app={
   	registraDireccion: function(datosAceleracion){
     	velocidadX = datosAceleracion.x ;
     	velocidadY = datosAceleracion.y ;
-  	}
+  	},
 
+		finalizaJuego: function (obj1, obj2){
+			//manejamos las acciones necesarias para finalizar la partida
+			console.log("fin de juego");
+			alert("fin de juego");
+		}
 };
 
 if ('addEventListener' in document) {
