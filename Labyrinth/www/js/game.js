@@ -1,6 +1,6 @@
 var app={
 
-	
+
 	inicio: function(){
 
 		//Velocidad de la bola en X
@@ -36,19 +36,20 @@ var app={
 		function preload() {
 
 			// setting the game on maximum scale mode to cover the entire screen
-		   
+
 			if (!game.device.desktop) {
 				console.log("es mobile!!!");
-		        mobile = true;   
-		        game.stage.fullScreenScaleMode = Phaser.StageScaleMode.EXACT_FIT;        
-		        game.stage.scale.startFullScreen();    
+		        mobile = true;
+
 		    }  else{
 		    	console.log("es desktop!!!");
 		    	mobile = false
-		    	game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-		    	game.scale.pageAlignHorizontally = true;
-  				game.scale.pageAlignVertically = true;
+
 		    }
+
+		    game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+		    game.scale.pageAlignHorizontally = true;
+  			game.scale.pageAlignVertically = true;
 
 			//Añade fisicas
 			game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -77,7 +78,7 @@ var app={
           	var levelObject = gameLevels[currentLevel - 1];
           	console.log("Punto Partida-->X:"+levelObject.startSpot.x+",Y:"+levelObject.startSpot.y);
 
-          	
+
 
           	//PRUEBA CON LAS FISICAS
           	atari = game.add.sprite(200, 300, 'atari');
@@ -85,7 +86,8 @@ var app={
           	game.physics.enable(atari, Phaser.Physics.ARCADE);
 
           	atari.body.collideWorldBounds = true;
-			atari.body.immovable = true;
+						atari.body.checkCollision = true;
+						atari.body.immovable = true;
 
 			console.log("Punto Final-->X:"+levelObject.endSpot.x+",Y:"+levelObject.endSpot.y);
 			objetivo = game.add.sprite(levelObject.endSpot.x, levelObject.endSpot.y, 'objetivo');
@@ -106,6 +108,8 @@ var app={
 
 		function update(){
 
+			game.physics.arcade.collide(atari, bola);
+
 			if(mobile){
 				var factorDificultad = 300;
              	bola.body.velocity.y = (velocidadY * factorDificultad);
@@ -113,8 +117,8 @@ var app={
 
 			}else{
 
-				bola.body.velocity.y = 0;
-             	bola.body.velocity.x = 0;
+					bola.body.velocity.y = 0;
+        	bola.body.velocity.x = 0;
 
 				if (cursors.left.isDown)
 				{
@@ -149,7 +153,7 @@ var app={
 	},
 
 	vigilaSensores: function(){
-    
+
 	    function onError() {
 	        console.log('onError!');
 	    }
